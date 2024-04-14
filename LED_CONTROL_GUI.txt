@@ -1,0 +1,50 @@
+from tkinter import *
+from gpiozero import PWMLED
+
+# Hardware setup
+led_red = PWMLED(27)
+led_green = PWMLED(14)
+led_blue = PWMLED(17)
+
+# GUI Definitions
+win = Tk()
+win.title("LED Intensity Control")
+
+scale_red = Scale(win, from_=0, to=1, resolution=0.01, label="Red LED")
+scale_red.pack()
+
+scale_green = Scale(win, from_=0, to=1, resolution=0.01, label="Green LED")
+scale_green.pack()
+
+scale_blue = Scale(win, from_=0, to=1, resolution=0.01, label="Blue LED")
+scale_blue.pack()
+
+# Define PWM control functions
+def update_red(value):
+    led_red.value = float(value)
+
+def update_green(value):
+    led_green.value = float(value)
+
+def update_blue(value):
+    led_blue.value = float(value)
+
+# Bind slider events
+scale_red.bind("<Motion>", lambda event: update_red(scale_red.get()))
+scale_green.bind("<Motion>", lambda event: update_green(scale_green.get()))
+scale_blue.bind("<Motion>", lambda event: update_blue(scale_blue.get()))
+
+# Define function to exit the application
+def close():
+    led_red.close()
+    led_green.close()
+    led_blue.close()
+    win.destroy()
+
+# Exit button
+exit_button = Button(win, text="Exit", command=close)
+exit_button.pack()
+
+# Run Tkinter event loop
+win.mainloop()
+
